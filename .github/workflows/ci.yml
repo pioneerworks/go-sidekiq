@@ -1,26 +1,20 @@
-name: Test go-workers2
+name: Test go-sidekiq
 on: [push]
 
 jobs:
-  test:
-    name: Test
+
+  build:
     runs-on: ubuntu-latest
-
-    services:
-      redis:
-        image: redis:6.0-alpine
-        ports:
-          - 6379:6379
-
     steps:
-      - name: Set up Go 1.13
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.13
-        id: go
+    - uses: actions/checkout@v3
 
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
 
-      - name: Test
-        run: make test
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
