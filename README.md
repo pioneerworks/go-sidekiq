@@ -125,6 +125,6 @@ When running the above code example, it will produce the following output at `lo
 ```
 
 
-Development sponsored by DigitalOcean. Code forked from [github/jrallison/go-workers](https://github.com/jrallison/go-workers). 
+Code forked from [github/digitalocean/go-workers2](https://github.com/digitalocean/go-workers2), and [jrallison/go-workers](https://github.com/jrallison/go-workers).
+
 Initial development sponsored by [Customer.io](http://customer.io).
-(Thank you for all of the amazing work!)
