@@ -1,8 +1,7 @@
-[![Build Status](https://travis-ci.org/digitalocean/go-workers2.png)](https://travis-ci.org/digitalocean/go-workers2)
-[![GoDoc](https://godoc.org/github.com/digitalocean/go-workers2?status.png)](https://godoc.org/github.com/digitalocean/go-workers2)
+[![Build Status](https://travis-ci.org/pioneerworks/go-sidekiq.png)](https://travis-ci.org/pioneerworks/go-sidekiq)
+[![GoDoc](https://godoc.org/github.com/pioneerworks/go-sidekiq?status.png)](https://godoc.org/github.com/pioneerworks/go-sidekiq)
 
-[Sidekiq](http://sidekiq.org/) compatible
-background workers in [golang](http://golang.org/).
+[Sidekiq](http://sidekiq.org/) compatible background jobs in [golang](http://golang.org/).
 
 - reliable queueing for all queues using [brpoplpush](http://redis.io/commands/brpoplpush)
 - handles retries
@@ -21,7 +20,7 @@ package main
 import (
   "fmt"
 
-  workers "github.com/digitalocean/go-workers2"
+  workers "github.com/pioneerworks/go-sidekiq"
 )
 
 func myJob(message *workers.Msg) error {
