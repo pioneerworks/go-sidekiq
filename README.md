@@ -1,3 +1,4 @@
+[![Test go-sidekiq](https://github.com/pioneerworks/go-sidekiq/actions/workflows/ci.yml/badge.svg)](https://github.com/pioneerworks/go-sidekiq/actions/workflows/ci.yml)
 [![GoDoc](https://godoc.org/github.com/pioneerworks/go-sidekiq?status.png)](https://godoc.org/github.com/pioneerworks/go-sidekiq)
 
 [Sidekiq](http://sidekiq.org/) compatible background jobs in [golang](http://golang.org/).
