@@ -24,7 +24,7 @@ func TestRetries_Empty(t *testing.T) {
 
 func TestRetries_NotEmpty(t *testing.T) {
 	a := &apiServer{
-		logger: log.New(os.Stdout, "go-workers2: ", log.Ldate|log.Lmicroseconds),
+		logger: log.New(os.Stdout, "go-sidekiq: ", log.Ldate|log.Lmicroseconds),
 	}
 
 	// test API replies without registered workers

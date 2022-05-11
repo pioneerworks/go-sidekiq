@@ -41,7 +41,7 @@ var globalHTTPServer *http.Server
 
 var globalAPIServer = &apiServer{
 	managers: map[string]*Manager{},
-	logger:   log.New(os.Stdout, "go-workers2: ", log.Ldate|log.Lmicroseconds),
+	logger:   log.New(os.Stdout, "go-sidekiq: ", log.Ldate|log.Lmicroseconds),
 	mux:      http.NewServeMux(),
 }
 
