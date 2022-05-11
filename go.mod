@@ -18,4 +18,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20210105161348-2e78108cf5f8 // indirect
 )
 
+retract (
+	[v0.7.0, v0.10.3]
+)
+
 go 1.18
