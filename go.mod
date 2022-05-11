@@ -1,4 +1,4 @@
-module github.com/digitalocean/go-workers2
+module github.com/pioneerworks/go-sidekiq
 
 require (
 	github.com/bitly/go-simplejson v0.5.0
