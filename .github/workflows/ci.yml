@@ -1,10 +1,17 @@
 name: Test go-sidekiq
 on: [push]
 
+
 jobs:
 
   build:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        ports:
+          # Opens tcp port 6379 on the host and service container
+          - 6379:6379
     steps:
     - uses: actions/checkout@v3
 
@@ -17,4 +24,4 @@ jobs:
       run: go build -v ./...
 
     - name: Test
-      run: go test -v ./...
+      run: go test -v -timeout 1m ./...
