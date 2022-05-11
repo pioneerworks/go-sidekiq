@@ -11,7 +11,7 @@ import (
 )
 
 func TestTaskRunner_process(t *testing.T) {
-	testLogger := log.New(os.Stdout, "test-go-workers2: ", log.Ldate|log.Lmicroseconds)
+	testLogger := log.New(os.Stdout, "test-go-sidekiq: ", log.Ldate|log.Lmicroseconds)
 
 	msg, _ := NewMsg(`{}`)
 

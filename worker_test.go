@@ -28,7 +28,7 @@ func (d dummyFetcher) Close()              { d.close() }
 func (d dummyFetcher) Closed() bool        { return d.closed() }
 
 func TestNewWorker(t *testing.T) {
-	testLogger := log.New(os.Stdout, "test-go-workers2: ", log.Ldate|log.Lmicroseconds)
+	testLogger := log.New(os.Stdout, "test-go-sidekiq: ", log.Ldate|log.Lmicroseconds)
 
 	cc := newCallCounter()
 	w := newWorker(testLogger, "q", 0, cc.F)
@@ -48,7 +48,7 @@ func TestNewWorker(t *testing.T) {
 }
 
 func TestWorker(t *testing.T) {
-	testLogger := log.New(os.Stdout, "test-go-workers2: ", log.Ldate|log.Lmicroseconds)
+	testLogger := log.New(os.Stdout, "test-go-sidekiq: ", log.Ldate|log.Lmicroseconds)
 
 	readyCh := make(chan bool)
 	msgCh := make(chan *Msg)
@@ -143,7 +143,7 @@ func TestWorker(t *testing.T) {
 }
 
 func TestWorkerProcessesAndAcksMessages(t *testing.T) {
-	testLogger := log.New(os.Stdout, "test-go-workers2: ", log.Ldate|log.Lmicroseconds)
+	testLogger := log.New(os.Stdout, "test-go-sidekiq: ", log.Ldate|log.Lmicroseconds)
 
 	readyCh := make(chan bool)
 	msgCh := make(chan *Msg)

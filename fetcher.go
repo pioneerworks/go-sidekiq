@@ -36,7 +36,7 @@ type simpleFetcher struct {
 func newSimpleFetcher(queue string, opts Options) *simpleFetcher {
 	logger := opts.Logger
 	if logger == nil {
-		logger = log.New(os.Stdout, "go-workers2: ", log.Ldate|log.Lmicroseconds)
+		logger = log.New(os.Stdout, "go-sidekiq: ", log.Ldate|log.Lmicroseconds)
 	}
 
 	return &simpleFetcher{

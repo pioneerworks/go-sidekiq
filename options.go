@@ -77,7 +77,7 @@ func processOptions(options Options) (Options, error) {
 	}
 
 	if options.Logger == nil {
-		options.Logger = log.New(os.Stdout, "go-workers2: ", log.Ldate|log.Lmicroseconds)
+		options.Logger = log.New(os.Stdout, "go-sidekiq: ", log.Ldate|log.Lmicroseconds)
 	}
 
 	redisStore := storage.NewRedisStore(options.Namespace, options.client, options.Logger)
@@ -99,7 +99,7 @@ func processOptionsWithRedisClient(options Options, client *redis.Client) (Optio
 	options.client = client
 
 	if options.Logger == nil {
-		options.Logger = log.New(os.Stdout, "go-workers2: ", log.Ldate|log.Lmicroseconds)
+		options.Logger = log.New(os.Stdout, "go-sidekiq ", log.Ldate|log.Lmicroseconds)
 	}
 
 	redisStore := storage.NewRedisStore(options.Namespace, options.client, options.Logger)
