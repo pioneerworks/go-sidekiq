@@ -27,21 +27,22 @@ func (c *Cron) Poll(interval time.Duration) {
 	}
 
 	for _, entry := range entries {
-		c.EnqueueOnce(entry, forTime)
+		if entry.ShouldEnqueue(forTime) {
+			c.EnqueueOnce(entry, forTime)
+		}
 	}
 }
 
 // EnqueueOnce takes into account the LastEnqueuedTime and only allows a job to be enqueued once per scheduled period.
 // The atomic behavior of the ZAdd operation makes this operation safe across multiple processes.
-func (c *Cron) EnqueueOnce(entry *CronEntry, forTime time.Time) {
-	if entry.ShouldEnqueue(forTime) {
-		score := float64(forTime.Unix())
-		member := entry.Next(forTime).Format(LastEnqueueTimeFormat)
-		r := c.mgr.GetRedisClient().ZAdd(context.Background(), entry.EnqueuedKey(), &redis.Z{Score: score, Member: member})
-		if r.Val() == 1 {
-			c.Enqueue(entry, forTime)
-		}
+func (c *Cron) EnqueueOnce(entry *CronEntry, forTime time.Time) error {
+	score := float64(forTime.Unix())
+	member := entry.Next(forTime).Format(LastEnqueueTimeFormat)
+	r := c.mgr.GetRedisClient().ZAdd(context.Background(), entry.EnqueuedKey(), &redis.Z{Score: score, Member: member})
+	if r.Val() == 1 {
+		c.Enqueue(entry, forTime)
 	}
+	return r.Err()
 }
 
 func (c *Cron) Enqueue(entry *CronEntry, forTime time.Time) bool {

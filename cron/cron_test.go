@@ -46,9 +46,10 @@ func TestAddCrons(t *testing.T) {
 	cron.AddCron(entry)
 }
 
-func TestEnqueue(t *testing.T) {
+func TestEnqueueOnce(t *testing.T) {
 	asrt := assert.New(t)
 	cron := NewTestCron(t)
+	client := cron.mgr.GetRedisClient()
 
 	entry := &CronEntry{
 		Name:        TestEntryName,
@@ -58,7 +59,23 @@ func TestEnqueue(t *testing.T) {
 		Job:         Job{Retry: "true", Queue: "default", Class: "GoWorker"},
 	}
 
-	curTime := time.Date(2020, 01, 02, 11, 33, 12, 0, time.UTC)
-	asrt.True(cron.Enqueue(entry, curTime))
-	asrt.False(cron.Enqueue(entry, curTime), "requeuing the job at the same time should fail")
+	type testcase struct {
+		name     string
+		forTime  time.Time
+		expected int64
+	}
+
+	cases := []testcase{
+		{name: "enqueue the first job attempt", forTime: time.Date(2020, 01, 02, 11, 30, 12, 0, time.UTC), expected: 1},
+		{name: "enqueue the second time for the same period will not enqueue", forTime: time.Date(2020, 01, 02, 11, 30, 12, 0, time.UTC), expected: 1},
+	}
+
+	for _, c := range cases {
+		err := cron.EnqueueOnce(entry, c.forTime)
+
+		asrt.NoError(err)
+		r := client.ZCard(context.Background(), entry.EnqueuedKey())
+		asrt.Equal(c.expected, r.Val())
+
+	}
 }
