@@ -35,7 +35,7 @@ func (c *Cron) Poll(interval time.Duration) {
 
 // EnqueueOnce takes into account the LastEnqueuedTime and only allows a job to be enqueued once per scheduled period.
 // The atomic behavior of the ZAdd operation makes this operation safe across multiple processes.
-func (c *Cron) EnqueueOnce(entry *CronEntry, forTime time.Time) error {
+func (c *Cron) EnqueueOnce(entry *cronEntry, forTime time.Time) error {
 	score := float64(forTime.Unix())
 	member := entry.Next(forTime).Format(LastEnqueueTimeFormat)
 	r := c.mgr.GetRedisClient().ZAdd(context.Background(), entry.EnqueuedKey(), &redis.Z{Score: score, Member: member})
@@ -45,7 +45,7 @@ func (c *Cron) EnqueueOnce(entry *CronEntry, forTime time.Time) error {
 	return r.Err()
 }
 
-func (c *Cron) Enqueue(entry *CronEntry, forTime time.Time) bool {
+func (c *Cron) Enqueue(entry *cronEntry, forTime time.Time) bool {
 	// enqueue
 	job := entry.Job
 	args := job.SafeArgs()
@@ -65,7 +65,7 @@ func (c *Cron) Enqueue(entry *CronEntry, forTime time.Time) bool {
 	return true
 }
 
-func (c *Cron) CronEntries() ([]*CronEntry, error) {
+func (c *Cron) CronEntries() ([]*cronEntry, error) {
 	ctx := context.Background()
 	redis := c.mgr.GetRedisClient()
 	cmd := redis.SMembers(ctx, "cron_jobs")
@@ -73,19 +73,19 @@ func (c *Cron) CronEntries() ([]*CronEntry, error) {
 		return nil, cmd.Err()
 	}
 
-	var entries []*CronEntry
+	var entries []*cronEntry
 	for _, val := range cmd.Val() {
 		r := c.mgr.GetRedisClient().HGetAll(ctx, val)
 		if r.Err() != nil {
 			return nil, cmd.Err()
 		}
-		entry, _ := NewEntryFromMap(r.Val())
+		entry, _ := CronEntryFromMap(r.Val())
 		entries = append(entries, entry)
 	}
 	return entries, nil
 }
 
-func (c *Cron) AddCron(e *CronEntry) error {
+func (c *Cron) AddCron(e *cronEntry) error {
 	ctx := context.Background()
 
 	cmd := c.mgr.GetRedisClient().SAdd(ctx, "cron_jobs", e.CronJobKey())
