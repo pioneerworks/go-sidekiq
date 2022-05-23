@@ -35,7 +35,7 @@ func reset(mgr *sidekiq.Manager) {
 func TestAddCrons(t *testing.T) {
 	cron := NewTestCron(t)
 
-	entry := &CronEntry{
+	entry := &cronEntry{
 		Name:        TestEntryName,
 		Status:      "enabled",
 		Description: "test cron tab for go sidekiq",
@@ -51,13 +51,7 @@ func TestEnqueueOnce(t *testing.T) {
 	cron := NewTestCron(t)
 	client := cron.mgr.GetRedisClient()
 
-	entry := &CronEntry{
-		Name:        TestEntryName,
-		Status:      "enabled",
-		Description: "test cron tab for go sidekiq",
-		Cron:        "*/5 * * * *",
-		Job:         Job{Retry: "true", Queue: "default", Class: "GoWorker"},
-	}
+	entry, _ := NewCronEntry(TestEntryName, "", "*/5 * * * *", Enabled, "", "", nil, Job{Retry: "true", Queue: "default", Class: "GoWorker"})
 
 	type testcase struct {
 		name     string
