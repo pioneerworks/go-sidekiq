@@ -16,7 +16,7 @@ const TestEntryName = "test cron"
 func NewTestCron(t *testing.T) *Cron {
 	mgr, err := sidekiq.NewManager(sidekiq.Options{ServerAddr: "localhost:6379", Database: 0, PoolSize: 30, ProcessID: "1"})
 	require.NoError(t, err)
-	cron := NewCron(mgr)
+	cron := NewCron(mgr, nil)
 
 	reset(mgr)
 
@@ -43,7 +43,7 @@ func TestAddCrons(t *testing.T) {
 		Job:         Job{Retry: "true", Queue: "default", Class: "GoWorker"},
 	}
 
-	cron.AddCron(entry)
+	cron.AddCron(context.Background(), entry)
 }
 
 func TestEnqueueOnce(t *testing.T) {
@@ -65,11 +65,10 @@ func TestEnqueueOnce(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		err := cron.EnqueueOnce(entry, c.forTime)
+		err := cron.enqueueEntries(context.Background(), []*cronEntry{entry}, c.forTime)
 
 		asrt.NoError(err)
 		r := client.ZCard(context.Background(), entry.EnqueuedKey())
 		asrt.Equal(c.expected, r.Val())
-
 	}
 }
