@@ -11,9 +11,8 @@ import (
 )
 
 type Cron struct {
-	mgr   *sidekiq.Manager
-	clock *clock
-	log   Logger
+	mgr *sidekiq.Manager
+	log Logger
 }
 type Logger interface {
 	Printf(format string, v ...any)
